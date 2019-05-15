@@ -95,26 +95,28 @@ class BlogController extends AbstractController
             ' ', ucwords(trim(strip_tags($categoryName)), "-")
         );
 
-        $Category = $this->getDoctrine()
+        $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBy(['name' => mb_strtolower(ucfirst($categoryName))]);
 
-        if (!$Category) {
+        if (!$category) {
             throw $this->createNotFoundException(
-                'No category with '.$Category.' name, found in category\'s table.'
+                'No category with '.$category.' name, found in category\'s table.'
             );
         }
 
-        $articlesByCategory = $this->getDoctrine()
-            ->getRepository(Article::class)
-            ->findBy(['category'=> $Category->getId()],
-                ['id'=>'DESC'],
-                3);
+//        $articlesByCategory = $this->getDoctrine()
+//            ->getRepository(Article::class)
+//            ->findBy(['category'=> $Category->getId()],
+//                ['id'=>'DESC'],
+//                3);
+
+        $articlesByCategory = $category->getArticles();
 
         return $this->render(
             'blog/category.html.twig',
-            ['articles'=>$articlesByCategory ]
+            ['articles'=>$articlesByCategory,
+                'category'=>$category]
         );
-
     }
 }
