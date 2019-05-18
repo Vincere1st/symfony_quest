@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <table>
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th colspan="3">{{ category.name }}</th>
+        </tr>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Content</th>
+        </tr>
+        </thead>
         <tbody>
         {% for article in articles %}
             <tr>
-                <td>{{ article.id }}</td>
+                <th scope="row">{{ article.id }}</th>
                 <td>{{ article.title }}</td>
                 <td>{{ article.content }}</td>
             </tr>

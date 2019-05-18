@@ -78,45 +78,21 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @param string $categoryName
-     * @Route("/blog/category/{categoryName}", name="show_category")
+     *
+     * @Route("/blog/category/{name}", name="show_category")
+     *
      * @return Response
      *
      */
-    public function showByCategory(string $categoryName) :Response
+    public function showByCategory(Category $categoryName) :Response
     {
-        if (!$categoryName) {
-            throw $this
-                ->createNotFoundException('No category has been sent to find articles in article\'s table.');
-        }
 
-        $categoryName = preg_replace(
-            '/-/',
-            ' ', ucwords(trim(strip_tags($categoryName)), "-")
-        );
-
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['name' => mb_strtolower(ucfirst($categoryName))]);
-
-        if (!$category) {
-            throw $this->createNotFoundException(
-                'No category with '.$category.' name, found in category\'s table.'
-            );
-        }
-
-//        $articlesByCategory = $this->getDoctrine()
-//            ->getRepository(Article::class)
-//            ->findBy(['category'=> $Category->getId()],
-//                ['id'=>'DESC'],
-//                3);
-
-        $articlesByCategory = $category->getArticles();
+        $articlesByCategory = $categoryName->getArticles();
 
         return $this->render(
             'blog/category.html.twig',
             ['articles'=>$articlesByCategory,
-                'category'=>$category]
+                'category'=>$categoryName]
         );
     }
 }
