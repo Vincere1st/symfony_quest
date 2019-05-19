@@ -11,5 +11,6 @@ class ArticleSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('searchField');
+        $builder->add('name');
     }
 }

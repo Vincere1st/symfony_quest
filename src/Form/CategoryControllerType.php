@@ -1,23 +1,21 @@
 <?php
 
-
 namespace App\Form;
 
-
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Category;
 
-class CategoryType extends AbstractType
+class CategoryControllerType extends AbstractType
 {
-    public function createForm()
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $category = new Category();
-        $form = $this->createForm(
-            CategoryType::class,
-            $category);
+        $builder
+            ->add('name')
+
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

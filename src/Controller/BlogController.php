@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Form\ArticleSearchType;
+use App\Form\CategoryControllerType;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -83,6 +85,30 @@ class BlogController extends AbstractController
                 'slug' => $slug,
             ]
         );
+    }
+
+    /**
+     * @Route("/blog/category", name="add_category")
+     *
+     * @return Response
+     */
+
+    public function addCategory(Request $request)
+    {
+        $category =new Category();
+        $form = $this->createForm(CategoryControllerType::class, $category);
+        $form->handleRequest($request);
+        $task = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('blog_index');
+        }
+
+        return $this->render('blog/add.html.twig',
+            ['form'=>$form->createView()]);
     }
 
     /**

@@ -11,6 +11,7 @@
     <button type="submit" name="btnSearch">Rechercher</button>
     {{ form_end(form) }}
 
+
     {% for article in articles %}
         <div>
             <h2>{{ loop.index }} / {{ article.title }} - Category : {{ article.category.name }}</h2>
