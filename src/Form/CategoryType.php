@@ -12,12 +12,12 @@ use App\Entity\Category;
 
 class CategoryType extends AbstractType
 {
-    public function createForm()
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $category = new Category();
-        $form = $this->createForm(
-            CategoryType::class,
-            $category);
+        $builder
+            ->add('name')
+
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
