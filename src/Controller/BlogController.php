@@ -8,6 +8,7 @@ use App\Entity\Category;
 use App\Entity\Tag;
 use App\Form\ArticleSearchType;
 use App\Form\CategoryType;
+use App\Repository\ArticleRepository;
 use phpDocumentor\Reflection\Types\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ class BlogController extends AbstractController
      * @Route("/blog", name="blog_index")
      * @return Response
      */
-    public function index() :Response
+    public function index(ArticleRepository $articleRepository) :Response
     {
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
@@ -42,7 +43,7 @@ class BlogController extends AbstractController
         );
 
         return $this->render('blog/index.html.twig', [
-            'articles'=>$articles,
+            'articles'=> $articleRepository->findAllWithCategories(),
             'form' => $form->createView(),
         ]);
     }
