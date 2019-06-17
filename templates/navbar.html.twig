@@ -19,6 +19,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="/blog/category">Category</a>
             </li>
+            {% if app.user %}
+                <div class="text-info">
+                Bonjour {{ app.user.email }} !
+                    <button class="btn btn-danger">
+                <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+                    </button>
+                </div>
+            {% else %}
+                <a href="{{ path('app_login') }}"> Se connecter</a>
+            {% endif %}
 
         </ul>
 
