@@ -49,6 +49,10 @@ class Article
      */
     private $author;
 
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
