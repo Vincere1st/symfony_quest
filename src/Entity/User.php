@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,9 +46,15 @@ class User implements UserInterface
      */
     private $articles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Article")
+     */
+    private $favori;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->favori = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,5 +176,41 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getFavori(): Collection
+    {
+        return $this->favori;
+    }
+
+    public function addFavori(Article $favori): self
+    {
+        if (!$this->favori->contains($favori)) {
+            $this->favori[] = $favori;
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Article $favori): self
+    {
+        if ($this->favori->contains($favori)) {
+            $this->favori->removeElement($favori);
+        }
+
+        return $this;
+    }
+
+    public function isFavori(Article $article): bool
+    {
+        if ($this->favori->contains($article)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

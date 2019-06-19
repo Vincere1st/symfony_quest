@@ -4,7 +4,10 @@
 
 {% block body %}
     <h1>Article</h1>
-
+    <a onclick="addToFavori()">
+        {{ isFavori ? '<i id="favori" class="fas fa-heart"></i>' :
+        '<i id="favori" class="far fa-heart"></i>' }}
+    </a>
     <table class="table">
         <tbody>
             <tr>
@@ -21,7 +24,6 @@
             </tr>
         </tbody>
     </table>
-
     <a href="{{ path('article_index') }}">back to list</a>
 
     <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>
@@ -31,7 +33,7 @@
     <strong>Tags :</strong>
     <ul>
         {% for tag in article.tags %}
-            <li><a href = "{{ path('show_by_tag',{'name': tag.name}) }}">{{ tag.name }} </li>
+            <li><a href = "{{ path('show_by_tag',{'name': tag.name}) }}">{{ tag.name }} </a></li>
         {% else %}
             <li>No tags for this article</li>
         {% endfor %}

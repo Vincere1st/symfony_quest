@@ -19,5 +19,23 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <script src="https://kit.fontawesome.com/f62deca48c.js"></script>
+        <script>
+            function addToFavori() {
+                fetch('{{ path('article_favori', {'id': article.id}) }}')
+                    .then(response => response.json())
+                    .then(json => {
+                        let favoriElt = document.getElementById('favori');
+                        if (json.isFavori) {
+                            favoriElt.classList.remove('far');
+                            favoriElt.classList.add('fas');
+                        }
+                        else {
+                            favoriElt.classList.remove('fas');
+                            favoriElt.classList.add('far');
+                        }
+                    });
+            }
+        </script>
     </body>
 </html>

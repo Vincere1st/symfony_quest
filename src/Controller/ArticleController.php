@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\User;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\Slugify;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +20,8 @@ class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="article_index", methods={"GET"})
+     * @param ArticleRepository $articleRepository
+     * @return Response
      */
     public function index(ArticleRepository $articleRepository): Response
     {
@@ -29,7 +33,10 @@ class ArticleController extends AbstractController
     /**
      *
      * @Route("/new", name="article_new", methods={"GET","POST"})
-     *
+     * @param Request $request
+     * @param Slugify $slugify
+     * @param \Swift_Mailer $mailer
+     * @return Response
      */
     public function new(Request $request, Slugify $slugify, \Swift_Mailer $mailer): Response
     {
@@ -68,16 +75,22 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}", name="article_show", methods={"GET"})
+     * @param Article $article
+     * @return Response
      */
     public function show(Article $article): Response
     {
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'isFavori' => $this->getUser()->isFavori($article)
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Article $article
+     * @return Response
      */
     public function edit(Request $request, Article $article): Response
     {
@@ -100,6 +113,9 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}", name="article_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Article $article
+     * @return Response
      */
     public function delete(Request $request, Article $article): Response
     {
@@ -110,5 +126,24 @@ class ArticleController extends AbstractController
         }
 
         return $this->redirectToRoute('article_index');
+    }
+
+    /**
+     * @Route("/{id}/favori", name="article_favori", methods={"GET","POST"})
+     */
+    public function favorite(Request $request, Article $article, ObjectManager $manager): Response
+    {
+        if ($this->getUser()->getFavori()->contains($article)) {
+            $this->getUser()->removeFavori($article)   ;
+        }
+        else {
+            $this->getUser()->addFavori($article);
+        }
+
+        $manager->flush();
+
+        return $this->json([
+            'isFavori' => $this->getUser()->isFavori($article)
+        ]);
     }
 }
